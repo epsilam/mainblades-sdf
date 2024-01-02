@@ -1,5 +1,5 @@
 from tkinter import *
-from polygonsketchpad import PolygonSketchpad
+from src.polygonsketchpad import PolygonSketchpad
 
 if __name__ == "__main__":
     root = Tk()
