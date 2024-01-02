@@ -26,7 +26,7 @@ class PolygonSketchpad(Canvas):
                                            outline="blue")
 
     def add_sdf_image(self):
-        # Create PIL image of polygon
+        # Create PIL image of polygon.
         canvas_width = self.winfo_width()
         canvas_height = self.winfo_height()
         image = Image.new("1",(canvas_width, canvas_height),"black")
@@ -38,20 +38,23 @@ class PolygonSketchpad(Canvas):
         # Normalize the image so the polygon boundary is the zero contour.
         polygon_image[polygon_image == 255] = 1
         polygon_image[polygon_image == 0] = -1
-        # Compute SDF
+        # Compute SDF.
         sdf = skfmm.distance(polygon_image)
-        # Separate SDF into positive and negative parts
+        # Separate SDF into positive and negative parts.
         pos_img = np.copy(sdf)
         pos_img[pos_img < 0] = 0
         pos_img = np.rint(pos_img / np.max(pos_img) * 255)
         neg_img = np.copy(sdf)
         neg_img[neg_img > 0] = 0
         neg_img = np.rint(neg_img / np.min(neg_img) * 255)
-        
+        # Convert SDF values to colors. 
         img = np.dstack((255*(neg_img>0)-neg_img, 255*(pos_img<0)-pos_img, 10*np.ones_like(sdf))) \
             .astype(np.uint8)
-        
+        # Convert SDF image to Tkinter compatible object. 
         photo = ImageTk.PhotoImage(image=Image.fromarray(img))
+        # Create label for SDF image to avoid Tkinter garbage collector from
+        # deleting the reference to the image.
         label = Label(image=photo)
         label.image = photo
+        # Place SDF image on the canvas.
         self.sdf_image = self.create_image(0,0, image=label.image, anchor='nw')
