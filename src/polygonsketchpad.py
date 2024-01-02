@@ -7,6 +7,7 @@ class PolygonSketchpad(Canvas):
     def __init__(self, parent, **kwargs):
         super().__init__(parent, **kwargs)
         self.bind("<Button-1>", self.add_point)
+        self.bind("<B1-Motion>", self.add_point)
         self.create_text((110,20), text="Click anywhere to place a vertex.")
         self.vertices = []
         self.polygon = None
@@ -23,7 +24,7 @@ class PolygonSketchpad(Canvas):
         self.delete(self.polygon)
         self.polygon = self.create_polygon(self.vertices, 
                                            fill='',
-                                           outline="blue")
+                                           outline="white")
 
     def add_sdf_image(self):
         # Create PIL image of polygon.
